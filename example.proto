@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package student;
+
+// 学生信息消息
+message Student {
+    string name = 1;                         // 学生姓名
+    int32 age = 2;                           // 学生年龄
+    bytes scores = 3;                       //将numpy转化为字节流类型传输
+    repeated int32 shape = 4;               //无法发序列化为原来的维度，需要用list传递原numpy形状,类型暂时用int64
+string attributes = 5;                         // 学生的其他属性，转化为json形式传输
+}
+
+// 响应消息：添加学生
+message AddStudentResponse {
+    string message = 1;                      // 处理结果消息
+    int32 student_id = 2;                    // 新增学生的 ID
+}
+
+// 请求消息：获取学生信息
+message GetStudentRequest {
+    int32 id = 2;                            // 学生 ID
+}
+
+// gRPC 服务定义
+service StudentService {
+    rpc AddStudent (Student) returns (AddStudentResponse);
+    rpc GetStudent (GetStudentRequest) returns (Student);
+}
